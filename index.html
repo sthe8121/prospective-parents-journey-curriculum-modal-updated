@@ -1,0 +1,340 @@
+id: prospective-parents-dashboard
+name: GMIS Prospective Parents Journey
+type: html
+content: |-
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>GMIS Prospective Parents Journey</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+      <script>
+          tailwind.config = {
+              theme: {
+                  extend: {
+                      colors: {
+                          gmis: {
+                              lightBlue: '#D4E9F7',
+                              gold: '#E1A948',
+                              navy: '#0E2A47',
+                              grey: '#4A4A4A',
+                              mist: '#F7F9FA'
+                          }
+                      }
+                  }
+              }
+          }
+      </script>
+      <style>
+          .journey-card {
+              transition: transform 0.3s, box-shadow 0.3s;
+              cursor: pointer;
+          }
+          .journey-card:hover {
+              transform: scale(1.05);
+              box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+          }
+          .modal-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(14, 42, 71, 0.8);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 1000;
+          }
+          .modal-content {
+              background: white;
+              border-radius: 12px;
+              max-width: 90%;
+              max-height: 90%;
+              width: 1200px;
+              height: 800px;
+              position: relative;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+              overflow: auto;
+          }
+          .iframe-container {
+              width: 100%;
+              height: 100%;
+          }
+          .exit-button {
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              background-color: #E1A948;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 8px;
+              z-index: 1100;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+          }
+          .exit-button:hover {
+              background-color: #0E2A47;
+          }
+          .mars-card {
+              background-image: url('https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/80294998/p0u1UHwHuiqnBdMu.png');
+              background-size: cover;
+              background-position: center;
+              position: relative;
+              height: 300px;
+          }
+          .mars-card-overlay {
+              position: absolute;
+              inset: 0;
+              background: linear-gradient(to bottom, transparent 60%, rgba(14, 42, 71, 0.8) 100%);
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+              padding: 15px;
+          }
+          .curriculum-content {
+              padding: 20px;
+              max-width: 800px;
+              margin: 0 auto;
+          }
+      </style>
+  </head>
+  <body class="bg-gmis-mist font-sans">
+      <nav class="bg-gmis-navy text-white p-4 flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+              <img src="gmis-logo.png" alt="GMIS Logo" class="h-10">
+              <span class="font-bold text-xl">GMIS Prospective Parents Journey</span>
+          </div>
+          <div class="flex space-x-4 items-center">
+              <div class="language-dropdown relative">
+                  <button id="language-toggle" class="flex items-center space-x-2 bg-gmis-gold px-3 py-2 rounded">
+                      <span id="current-language">Language</span>
+                      <i class="ri-arrow-down-s-line"></i>
+                  </button>
+                  <div id="language-menu" class="hidden absolute right-0 mt-2 bg-white text-gmis-navy rounded shadow-lg">
+                      <button onclick="changeLanguage('en')" class="block w-full text-left px-4 py-2 hover:bg-gmis-lightBlue">
+                          <img src="en-flag.png" alt="English" class="inline-block h-4 w-6 mr-2">English
+                      </button>
+                      <button onclick="changeLanguage('ko')" class="block w-full text-left px-4 py-2 hover:bg-gmis-lightBlue">
+                          <img src="ko-flag.png" alt="Korean" class="inline-block h-4 w-6 mr-2">한국어
+                      </button>
+                      <button onclick="changeLanguage('hi')" class="block w-full text-left px-4 py-2 hover:bg-gmis-lightBlue">
+                          <img src="hi-flag.png" alt="Hindi" class="inline-block h-4 w-6 mr-2">हिन्दी
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </nav>
+
+      <div id="modal-container" class="hidden modal-overlay">
+          <div class="modal-content">
+              <div id="exit-button" class="exit-button" onclick="closeModal()">
+                  <i class="ri-close-line mr-2"></i>Back to Journey
+              </div>
+              <iframe id="journey-iframe" class="iframe-container" src="" frameborder="0"></iframe>
+          </div>
+      </div>
+
+      <div id="curriculum-modal" class="hidden modal-overlay">
+          <div class="modal-content overflow-auto">
+              <div class="exit-button" onclick="closeCurriculumModal()">
+                  <i class="ri-close-line mr-2"></i>Close
+              </div>
+              <div class="curriculum-content">
+                  <!DOCTYPE html>
+                  <html lang="en">
+                  <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>GMIS Semarang Curriculum Overview</title>
+                    <style>
+                      body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f5f5f5;
+                        margin: 0;
+                        padding: 0;
+                      }
+                      
+                      .container {
+                        max-width: 1200px;
+                        margin: 0 auto;
+                        padding: 40px;
+                      }
+                      
+                      .curriculum-timeline {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        margin-top: 40px;
+                      }
+                      
+                      .timeline-item {
+                        flex: 1 1 300px;
+                        background-color: white;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        padding: 30px;
+                        margin: 20px;
+                        text-align: center;
+                      }
+                      
+                      .timeline-item h3 {
+                        color: #333;
+                        margin-bottom: 10px;
+                      }
+                      
+                      .timeline-item p {
+                        color: #666;
+                        font-size: 14px;
+                        margin-bottom: 20px;
+                      }
+                      
+                      .timeline-item ul {
+                        list-style-type: none;
+                        padding: 0;
+                        margin: 0;
+                        text-align: left;
+                      }
+                      
+                      .timeline-item li {
+                        margin-bottom: 8px;
+                        color: #444;
+                      }
+                      
+                      .timeline-item .special-point {
+                        background-color: #f0f8ff;
+                        border-radius: 4px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        color: #1e90ff;
+                        margin-top: 12px;
+                        display: inline-block;
+                      }
+                    </style>
+                  </head>
+                  <body>
+                    <div class="container">
+                      <h1>GMIS Semarang Curriculum Overview</h1>
+                      <div class="curriculum-timeline">
+                        <div class="timeline-item">
+                          <h3>Preschool</h3>
+                          <p>Ages 3-5</p>
+                          <ul>
+                            <li>International Early Years Framework</li>
+                            <li>Play-based learning</li>
+                            <li>Multisensory development</li>
+                          </ul>
+                        </div>
+                        <div class="timeline-item">
+                          <h3>Primary (Grades 1-6)</h3>
+                          <p>Ages 6-10</p>
+                          <ul>
+                            <li>Cambridge Primary Curriculum</li>
+                            <li>Subjects: English, Math, Science</li>
+                            <span class="special-point">Checkpoint: Primary at Year 6</span>
+                          </ul>
+                        </div>
+                        <div class="timeline-item">
+                          <h3>Lower Secondary (Grades 7-8)</h3>
+                          <p>Ages 11-13</p>
+                          <ul>
+                            <li>Cambridge Lower Secondary</li>
+                            <li>Subjects: English, Math, Science, Global Perspectives</li>
+                            <span class="special-point">Checkpoint: Lower Secondary at Year 8</span>
+                          </ul>
+                        </div>
+                        <div class="timeline-item">
+                          <h3>Upper Secondary (Grades 9-10)</h3>
+                          <p>Ages 14-16</p>
+                          <ul>
+                            <li>Cambridge IGCSE Curriculum</li>
+                            <li>Subjects: English, Math, Sciences, Business, ICT</li>
+                            <span class="special-point">Examinations: IGCSE at Year 10</span>
+                            <span class="special-point">Matriculation at Year 10</span>
+                          </ul>
+                        </div>
+                        <div class="timeline-item">
+                          <h3>Higher Secondary (Grades 11-12)</h3>
+                          <p>Ages 17-18</p>
+                          <ul>
+                            <li>Oxford AQA International Curriculum</li>
+                            <li>Subjects: English Language, Math, Business, Science</li>
+                            <span class="special-point">Examinations: International A level AQA at Year 12</span>
+                            <span class="special-point">Matriculation at Year 12</span>
+                          </ul>
+                        </div>
+                        <div class="timeline-item">
+                          <h3>Co-Curricular Programs</h3>
+                          <p>All Grade Levels</p>
+                          <ul>
+                            <li>Languages: Korean, Hindi, Mandarin</li>
+                            <li>STEAM, Robotics, Public Speaking</li>
+                            <li>Global Citizenship and Leadership</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </body>
+                  </html>
+              </div>
+          </div>
+      </div>
+
+      <div class="container mx-auto px-4 py-8">
+          <h1 class="text-3xl font-bold text-gmis-navy mb-6">
+              Discover Your GMIS Journey
+          </h1>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+              <!-- Gallery Walk Intro -->
+              <div class="bg-white p-6 rounded-lg shadow-lg journey-card" onclick="loadJourney('intro')">
+                  <h3 class="text-xl font-bold text-gmis-navy mb-4">Gallery Walk Intro</h3>
+                  <button class="w-full bg-gmis-gold text-white py-3 rounded-lg hover:bg-gmis-navy transition-colors">
+                      <i class="ri-image-line mr-2"></i>
+                      Start Journey
+                  </button>
+              </div>
+
+              <!-- Values -->
+              <div class="bg-white p-6 rounded-lg shadow-lg journey-card" onclick="loadJourney('values')">
+                  <h3 class="text-xl font-bold text-gmis-navy mb-4">Our Values</h3>
+                  <button class="w-full bg-gmis-gold text-white py-3 rounded-lg hover:bg-gmis-navy transition-colors">
+                      <i class="ri-heart-line mr-2"></i>
+                      Discover Values
+                  </button>
+              </div>
+
+              <!-- Clubs -->
+              <div class="bg-white p-6 rounded-lg shadow-lg journey-card" onclick="loadJourney('clubs')">
+                  <h3 class="text-xl font-bold text-gmis-navy mb-4">School Clubs</h3>
+                  <button class="w-full bg-gmis-gold text-white py-3 rounded-lg hover:bg-gmis-navy transition-colors">
+                      <i class="ri-group-line mr-2"></i>
+                      Explore Clubs
+                  </button>
+              </div>
+
+              <!-- Curriculum -->
+              <div class="bg-white p-6 rounded-lg shadow-lg journey-card" onclick="openCurriculumModal()">
+                  <h3 class="text-xl font-bold text-gmis-navy mb-4">Curriculum</h3>
+                  <button class="w-full bg-gmis-gold text-white py-3 rounded-lg hover:bg-gmis-navy transition-colors">
+                      <i class="ri-book-open-line mr-2"></i>
+                      Explore Curriculum
+                  </button>
+              </div>
+
+              <!-- Mars Mission -->
+              <div class="bg-white p-6 rounded-lg shadow-lg journey-card mars-card" onclick="loadJourney('mars')">
+                  <div class="mars-card-overlay">
+                      <h3 class="text-xl font-bold text-white">Little Gandhi Mars Mission</h3>
+                      <p class="text-white text-sm">Explore Our Cosmic Journey</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script>
+          const journeySequence = {
+              intro: {
+                  url: 'https://sthe8121.github.io/gmis-gallery-walk-intro/',
