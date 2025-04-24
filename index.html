@@ -1,84 +1,326 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GMIS Semarang Whole School Curriculum</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">
-  <div class="max-w-7xl mx-auto px-4 py-10">
-    <h1 class="text-3xl font-bold text-center mb-8 text-blue-900">GMIS Semarang Whole School Curriculum Overview</h1>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>GMIS Parent Dashboard</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+      <script>
+          tailwind.config = {
+              theme: {
+                  extend: {
+                      colors: {
+                          gmis: {
+                              lightBlue: '#D4E9F7',
+                              gold: '#E1A948',
+                              navy: '#0E2A47',
+                              grey: '#4A4A4A',
+                              mist: '#F7F9FA'
+                          }
+                      }
+                  }
+              }
+          }
+      </script>
+      <style>
+          /* Core Modal Styles */
+          .modal-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.7);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 1000;
+          }
+          .modal-content {
+              background: white;
+              border-radius: 12px;
+              max-width: 90%;
+              max-height: 90%;
+              width: 1200px;
+              height: 800px;
+              position: relative;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+          .modal-close {
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              background: #f44336;
+              color: white;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              cursor: pointer;
+              z-index: 1100;
+          }
+          
+          /* Card Animations */
+          .ar-card, .value-card, .club-card {
+              transition: all 0.3s ease;
+          }
+          .ar-card:hover {
+              transform: scale(1.05);
+              box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+          }
+          .value-card:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 0 15px rgba(255,255,255,0.7);
+          }
+          .club-card:hover {
+              transform: scale(1.03);
+              box-shadow: 0 0 10px rgba(225, 169, 72, 0.5);
+          }
+      </style>
+  </head>
+  <body class="bg-gmis-mist">
+      <div class="container mx-auto px-4 py-8">
+          <!-- Top Navigation -->
+          <div class="flex justify-between items-center mb-4">
+              <h2 class="text-2xl font-bold text-gmis-navy">Weekly Notice Board</h2>
+              <div class="flex space-x-2 items-center">
+                  <!-- UNESCO AI Framework Modal Trigger -->
+                  <button onclick="openUNESCOModal()" class="p-2 rounded-full hover:bg-gmis-gold transition-colors mr-2">
+                      <img src="image_picker_9DB7D71C-D262-405B-AF6C-70796E015F5F-10948-0000028E" alt="UNESCO AI" class="h-6 w-6">
+                  </button>
+                  
+                  <!-- Social Icons -->
+                  <a href="https://t.me/GMISConciergeBot" target="_blank" class="text-gmis-navy hover:text-gmis-gold mr-2">
+                      <i class="ri-send-plane-fill text-xl"></i>
+                  </a>
+                  <a href="https://wa.me/628112788080" target="_blank" class="text-gmis-navy hover:text-gmis-gold mr-2">
+                      <i class="ri-whatsapp-line text-xl"></i>
+                  </a>
+
+                  <!-- Action Buttons -->
+                  <button class="px-3 py-1 bg-gmis-gold text-white rounded">
+                      <i class="ri-translate-2-line mr-1"></i> 한국어
+                  </button>
+                  <button class="px-3 py-1 bg-gmis-lightBlue text-gmis-navy rounded">
+                      <i class="ri-printer-line mr-1"></i> Print
+                  </button>
+              </div>
+          </div>
+          
+          <!-- Weekly Notice Board -->
+          <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+              <div class="bg-gmis-lightBlue p-4 rounded-lg mb-4">
+                  <h3 class="text-lg font-bold text-gmis-navy mb-2">Early Years Winter Concert - This Friday</h3>
+                  <div class="space-y-2">
+                      <p><strong>Time:</strong> 2:00 PM - 3:30 PM</p>
+                      <p><strong>Attire Required:</strong> White polo shirt, navy blue trousers/skirt</p>
+                      <p><strong>Items to Bring:</strong> Water bottle, change of clothes</p>
+                      <button class="mt-2 px-4 py-2 bg-gmis-gold text-white rounded hover:bg-opacity-90">
+                          RSVP Now
+                      </button>
+                  </div>
+              </div>
+
+              <div class="space-y-4">
+                  <div class="border-l-4 border-gmis-gold pl-4">
+                      <h4 class="font-bold">Monday, April 8</h4>
+                      <p>Swimming lessons - Please bring swimwear and towel</p>
+                  </div>
+                  <div class="border-l-4 border-gmis-grey pl-4">
+                      <h4 class="font-bold text-gmis-grey opacity-50">Parents Evening</h4>
+                      <p class="text-gmis-grey opacity-50">Sign-up opens April 15</p>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Interactive Cards Section -->
+          <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+              <h3 class="text-lg font-bold text-gmis-navy mb-4">School Programs</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <!-- AR Experience Cards -->
+                  <div class="ar-card bg-gmis-lightBlue p-4 rounded-lg cursor-pointer" onclick="window.open('https://sthe8121.github.io/field-trips-mars/', '_blank')">
+                      <img src="mars.png" alt="Mars Mission AR" class="w-full h-48 object-cover rounded-lg mb-4">
+                      <h4 class="text-md font-semibold text-gmis-navy">Little Gandhi Mission to Mars</h4>
+                      <p class="text-sm text-gmis-grey">AR & 3D Mars Exploration</p>
+                  </div>
+                  <div class="ar-card bg-gmis-lightBlue p-4 rounded-lg cursor-pointer" onclick="window.open('https://sthe8121.github.io/gallery-walk-lincoln-mask/', '_blank')">
+                      <img src="lincolnmask.png" alt="Lincoln Mask" class="w-full h-48 object-cover rounded-lg mb-4">
+                      <h4 class="text-md font-semibold text-gmis-navy">3D Lincoln Mask</h4>
+                      <p class="text-sm text-gmis-grey">Interactive Historical Artifact</p>
+                  </div>
+                  
+                  <!-- New Value Card -->
+                  <div class="value-card bg-gmis-lightBlue p-4 rounded-lg cursor-pointer" onclick="openValuesModal()">
+                      <img src="values.png" alt="GMIS Values" class="w-full h-48 object-cover rounded-lg mb-4">
+                      <h4 class="text-md font-semibold text-gmis-navy">Core Values & Heritage</h4>
+                      <p class="text-sm text-gmis-grey">Explore our educational philosophy</p>
+                  </div>
+                  
+                  <!-- New Club Card -->
+                  <div class="club-card bg-gmis-lightBlue p-4 rounded-lg cursor-pointer" onclick="openClubsModal()">
+                      <img src="clubs.png" alt="School Clubs" class="w-full h-48 object-cover rounded-lg mb-4">
+                      <h4 class="text-md font-semibold text-gmis-navy">After School Clubs</h4>
+                      <p class="text-sm text-gmis-grey">Discover extracurricular activities</p>
+                  </div>
+                  
+                  <!-- Curriculum Card -->
+                  <div class="ar-card bg-gmis-lightBlue p-4 rounded-lg cursor-pointer" onclick="openCurriculumModal()">
+                      <img src="curriculum.png" alt="Updated Curriculum" class="w-full h-48 object-cover rounded-lg mb-4">
+                      <h4 class="text-md font-semibold text-gmis-navy">Enhanced Curriculum</h4>
+                      <p class="text-sm text-gmis-grey">EYFS to Grade 12 pathways</p>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Child Information Section -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white p-6 rounded-lg shadow-lg">
+                  <h3 class="text-lg font-bold text-gmis-navy mb-4">Sarah's Progress</h3>
+                  <div class="space-y-4">
+                      <div class="flex justify-between items-center">
+                          <span>Reading Level</span>
+                          <span class="text-gmis-gold">Advanced</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                          <span>Next Assessment</span>
+                          <span>April 15</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-lg">
+                  <h3 class="text-lg font-bold text-gmis-navy mb-4">Upcoming Activities</h3>
+                  <ul class="space-y-4">
+                      <li class="flex items-center justify-between">
+                          <div class="flex items-center">
+                              <i class="ri-calendar-event-line text-gmis-gold mr-2"></i>
+                              Art Exhibition
+                          </div>
+                          <span>April 12</span>
+                      </li>
+                      <li class="flex items-center justify-between">
+                          <div class="flex items-center">
+                              <i class="ri-calendar-event-line text-gmis-gold mr-2"></i>
+                              Science Fair
+                          </div>
+                          <span>April 18</span>
+                      </li>
+                      <li class="flex items-center justify-between opacity-50">
+                          <div class="flex items-center">
+                              <i class="ri-group-line text-gmis-grey mr-2"></i>
+                              <span class="text-gmis-grey">After School Clubs Booking</span>
+                          </div>
+                          <span class="text-sm bg-gmis-mist px-2 py-1 rounded">
+                              Opens April 10
+                          </span>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+
+      <!-- Modal Collection -->
+      <!-- UNESCO Modal -->
+      <div id="unesco-modal" class="modal-overlay hidden">
+          <div class="modal-content p-8">
+              <div class="modal-close" onclick="closeUNESCOModal()">
+                  <i class="ri-close-line text-2xl"></i>
+              </div>
+              <h2 class="text-2xl font-bold text-gmis-navy mb-6">UNESCO AI Competency Framework</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                      <img src="image_picker_9DB7D71C-D262-405B-AF6C-70796E015F5F-10948-0000028E" alt="UNESCO AI Framework for Teachers" class="w-full rounded-lg mb-4">
+                      <div class="text-center">
+                          <a href="https://lnkd.in/gsg49u6F" target="_blank" class="bg-gmis-gold text-white px-4 py-2 rounded hover:bg-opacity-90">
+                              Teachers Framework
+                          </a>
+                      </div>
+                  </div>
+                  <div>
+                      <img src="image_picker_9DB7D71C-D262-405B-AF6C-70796E015F5F-10948-0000028E" alt="UNESCO AI Framework for Students" class="w-full rounded-lg mb-4">
+                      <div class="text-center">
+                          <a href="https://lnkd.in/efrqRm9j" target="_blank" class="bg-gmis-gold text-white px-4 py-2 rounded hover:bg-opacity-90">
+                              Students Framework
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Values Modal -->
+      <div id="values-modal" class="modal-overlay hidden">
+          <div class="modal-content p-8">
+              <div class="modal-close" onclick="closeValuesModal()">
+                  <i class="ri-close-line text-2xl"></i>
+              </div>
+              <iframe src="https://sthe8121.github.io/values-heritage/" 
+                      class="w-full h-full border-0 rounded-lg"></iframe>
+          </div>
+      </div>
+
+      <!-- Clubs Modal -->
+      <div id="clubs-modal" class="modal-overlay hidden">
+          <div class="modal-content p-8">
+              <div class="modal-close" onclick="closeClubsModal()">
+                  <i class="ri-close-line text-2xl"></i>
+              </div>
+              <iframe src="https://sthe8121.github.io/clubs-carousel/" 
+                      class="w-full h-full border-0 rounded-lg"></iframe>
+          </div>
+      </div>
+
+      <!-- Curriculum Modal -->
+      <div id="curriculum-modal" class="modal-overlay hidden">
+          <div class="modal-content p-8">
+              <div class="modal-close" onclick="closeCurriculumModal()">
+                  <i class="ri-close-line text-2xl"></i>
+              </div>
+              <img src="curriculum.png" alt="Updated Curriculum" class="w-full h-auto rounded-lg">
+          </div>
+      </div>
+
+      <script>
+          // Modal Control Functions
+          function openUNESCOModal() { document.getElementById('unesco-modal').classList.remove('hidden'); }
+          function closeUNESCOModal() { document.getElementById('unesco-modal').classList.add('hidden'); }
+          function openValuesModal() { document.getElementById('values-modal').classList.remove('hidden'); }
+          function closeValuesModal() { document.getElementById('values-modal').classList.add('hidden'); }
+          function openClubsModal() { document.getElementById('clubs-modal').classList.remove('hidden'); }
+          function closeClubsModal() { document.getElementById('clubs-modal').classList.add('hidden'); }
+          function openCurriculumModal() { document.getElementById('curriculum-modal').classList.remove('hidden'); }
+          function closeCurriculumModal() { document.getElementById('curriculum-modal').classList.add('hidden'); }
+
+          // Existing functionality
+          document.querySelector('[class*="translate"]').addEventListener('click', () => {
+              console.log('Translation requested');
+          });
+          document.querySelector('button:contains("RSVP")').addEventListener('click', () => {
+              console.log('RSVP clicked');
+          });
+          function updateBookingStatus() {
+              const now = new Date();
+              const clubsOpenDate = new Date('2025-04-10');
+              const parentsEveningDate = new Date('2025-04-15');
+          }
+          updateBookingStatus();
+
+          // Handle ESC key for all modals
+          document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                  closeUNESCOModal();
+                  closeValuesModal();
+                  closeClubsModal();
+                  closeCurriculumModal();
+              }
+          });
+      </script>
+  </body>
+  </html>
+         
+
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+     
       
-      <!-- Preschool -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-400">
-        <h2 class="text-xl font-semibold text-yellow-600 mb-2">Preschool</h2>
-        <p class="text-sm">Ages 3–5</p>
-        <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
-          <li>International Early Years Framework</li>
-          <li>Play-based learning</li>
-          <li>Multisensory development</li>
-        </ul>
-      </div>
-
-      <!-- Primary -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-400">
-        <h2 class="text-xl font-semibold text-green-600 mb-2">Primary (Grades 1–5)</h2>
-        <p class="text-sm">Ages 6–10</p>
-        <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
-          <li>Cambridge Primary Curriculum</li>
-          <li>Subjects: English, Math, Science</li>
-          <li>Checkpoint in Grade 6</li>
-        </ul>
-      </div>
-
-      <!-- Lower Secondary -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-400">
-        <h2 class="text-xl font-semibold text-blue-600 mb-2">Lower Secondary (Grades 6–8)</h2>
-        <p class="text-sm">Ages 11–13</p>
-        <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
-          <li>Cambridge Lower Secondary</li>
-          <li>Subjects: English, Math, Science, Global Perspectives</li>
-          <li>Checkpoint in Grade 8</li>
-        </ul>
-      </div>
-
-      <!-- Upper Secondary -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-400">
-        <h2 class="text-xl font-semibold text-purple-600 mb-2">Upper Secondary (Grades 9–10)</h2>
-        <p class="text-sm">Ages 14–16</p>
-        <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
-          <li>Cambridge IGCSE Curriculum</li>
-          <li>Subjects: English, Math, Sciences, Business, ICT</li>
-          <li>External exams in Grade 10</li>
-        </ul>
-      </div>
-
-      <!-- Higher Secondary -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-400">
-        <h2 class="text-xl font-semibold text-red-600 mb-2">Higher Secondary (Grades 11–12)</h2>
-        <p class="text-sm">Ages 17–18</p>
-        <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
-          <li>Oxford AQA International Curriculum</li>
-          <li>Subjects: English Language, Math, Business, Science</li>
-          <li>AQA Exams in Grade 12</li>
-        </ul>
-      </div>
-
-      <!-- Co-Curricular -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-indigo-400">
-        <h2 class="text-xl font-semibold text-indigo-600 mb-2">Co-Curricular Programs</h2>
-        <p class="text-sm">All Grade Levels</p>
-        <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
-          <li>Languages: Korean, Hindi, Mandarin</li>
-          <li>STEAM, Robotics, Public Speaking</li>
-          <li>Global Citizenship and Leadership</li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-</body>
-</html>
